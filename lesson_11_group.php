@@ -21,7 +21,7 @@
                 <div class="tovar_name"><?php echo $tovar['name']; ?></div>
                 <div class="tovar_cost"><?php echo $tovar['cost']; ?></div>
                 <div class="tovar_url">
-                    <a href="?razdel=item$name=<?php echo urldecode($group_name); ?>
+                    <a href="?razdel=item&name=<?php echo urldecode($group_name); ?>
 &name_tovar=<?php echo urldecode($tovar['name']); ?>
 &cost=<?php echo urldecode($tovar['cost']); ?>">Купи</a>
                 </div>
