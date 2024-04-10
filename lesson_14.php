@@ -43,6 +43,19 @@ if ($action=="done") {
         if ($sub_key=="id_done_") {
             $id = substr($key,8);
             echo "<hr>Выполнено... id=".$id."<br>";
+
+            $sql = "UPDATE `ToDo` SET complete=1 WHERE id=?";
+
+            $conn = new mysqli("localhost", "root","","ToDo",3306);
+            $conn->set_charset("utf8");
+            if ($conn->connect_error) {
+                die("Ошибка: ".$conn->connect_error);
+            }
+    
+            $stmt= $conn->prepare($sql);
+    
+            $stmt->bind_param("s",$id);
+            $stmt->execute();
         }
     }
 }
@@ -50,7 +63,7 @@ if ($action=="done") {
 if ($action=="delete") {
     foreach($_GET as $key => $value) {
         $sub_key = substr($key,0,8);
-        if ($sub_key=="id_delete_") {
+        if ($sub_key=="id_done_") {
             $id = substr($key,8);
             echo "<hr>Удалено... id=".$id."<br>";
 
@@ -89,18 +102,20 @@ if ($action=="delete") {
     
         if ($result) {
             foreach ($result as $row) {
+                if ($row['complete']==1) {
+                echo "<li>";
+                echo '<input type="checkbox" name="id_done_'.$row['id'].'" value="1">';
+                echo '<s>'.$row['text'].'</s>';
+                echo "</li>";} 
+                else {
                 echo "<li>";
                 echo '<input type="checkbox" name="id_done_'.$row['id'].'" value="1">';
                 echo $row['text'];
-                echo "</li>";
+                echo "</li>";}
             }
         }
     ?>
-    <ul>
-        <li>
-           <input type="checkbox" name="id_done_1" value="1"> Задание №1 
-        </li>
-    </ul>
+
     <button type="submit" name="action" value="done">Выполнены</button>
     <button type="submit" name="action" value="delete">Удалить</button>
 
